@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: e94b72ab1207a3f44ba0604be09a9a18
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Sabarian
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: d09c013ee7a8bb044aee32ecfaeedabe, type: 3}
+  - {fileID: 12800000, guid: c4c63857a9664a94ca4145a31d01a07f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

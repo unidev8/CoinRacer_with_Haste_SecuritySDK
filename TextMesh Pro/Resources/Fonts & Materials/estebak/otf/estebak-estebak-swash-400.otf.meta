@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: bf59030fd522d714baa1b8c204b90273
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Estebak Swash
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: ab015d18d25a7004d90b31b9eb93aecd, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -816,7 +816,61 @@ namespace Mirror
             else
                 // This clears both isLocalPlayer and hasAuthority on client
                 previousPlayer.RemoveClientAuthority();
+            //GameObject.Destroy(previousPlayer.gameObject);
+            return true;
+        }
 
+        public static bool ReplacePlayerForConnection_v2(NetworkConnection conn, GameObject player, bool keepAuthority = false)
+        {
+            NetworkIdentity identity = player.GetComponent<NetworkIdentity>();
+            if (identity == null)
+            {
+                Debug.LogError($"ReplacePlayer: playerGameObject has no NetworkIdentity. Please add a NetworkIdentity to {player}");
+                return false;
+            }
+
+            if (identity.connectionToClient != null && identity.connectionToClient != conn)
+            {
+                Debug.LogError($"Cannot replace player for connection. New player is already owned by a different connection{player}");
+                return false;
+            }
+
+            //NOTE: there can be an existing player
+            //Debug.Log("NetworkServer ReplacePlayer");
+
+            NetworkIdentity previousPlayer = conn.identity;
+
+            conn.identity = identity;
+
+            // Set the connection on the NetworkIdentity on the server, NetworkIdentity.SetLocalPlayer is not called on the server (it is on clients)
+            identity.SetClientOwner(conn);
+
+            // special case,  we are in host mode,  set hasAuthority to true so that all overrides see it
+            if (conn is LocalConnectionToClient)
+            {
+                identity.hasAuthority = true;
+                NetworkClient.InternalAddPlayer(identity);
+            }
+
+            // add connection to observers AFTER the playerController was set.
+            // by definition, there is nothing to observe if there is no player
+            // controller.
+            //
+            // IMPORTANT: do this in AddPlayerForConnection & ReplacePlayerForConnection!
+            SpawnObserversForConnection(conn);
+
+            //Debug.Log($"Replacing playerGameObject object netId:{player.GetComponent<NetworkIdentity>().netId} asset ID {player.GetComponent<NetworkIdentity>().assetId}");
+
+            Respawn(identity);
+
+            if (keepAuthority)
+                // This needs to be sent to clear isLocalPlayer on
+                // client while keeping hasAuthority true
+                SendChangeOwnerMessage(previousPlayer, conn);
+            else
+                // This clears both isLocalPlayer and hasAuthority on client
+                previousPlayer.RemoveClientAuthority();
+            GameObject.Destroy(previousPlayer.gameObject);
             return true;
         }
 

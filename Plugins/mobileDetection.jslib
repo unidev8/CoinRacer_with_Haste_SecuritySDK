@@ -18,7 +18,7 @@ mergeInto(LibraryManager.library, {
     //else if(window.location.origin.indexOf('localhost') >= 0)
       //returnStr = "localhost";
     //else
-      returnStr = "william-test-server.deamtest.com"; //"api.sample.hasteoriginals.com";
+      returnStr = "haste-racer-game-server.neurokod.com"; //"william-test-server.deamtest.com";
     var bufferSize = lengthBytesUTF8(returnStr) + 1;
     var buffer = _malloc(bufferSize);
     stringToUTF8(returnStr, buffer, bufferSize);

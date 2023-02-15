@@ -41,17 +41,41 @@ public class Leaderboards : NetworkBehaviour
                 return;
             }
             GameObject.Find("LeaderboardSelection").GetComponent<LoadingProcess>().ActiveLeaderBoard();
+            int idx = 0;
             // now that we are on the client with the leaderboard details we can dynamically add buttons to the canvas
             foreach (var leaderboard in hasteLeaderboards)
-            {
+            {                
                 TMP_Dropdown.OptionData optData = new TMP_Dropdown.OptionData();
-                optData.text = leaderboard.name;
+
+                switch (idx)
+                {
+                    case 0:
+                        optData.text = "Practice - Free";
+                        break;
+                    case 1:
+                        optData.text = "Nano - $0.01";
+                        break;
+                    case 2:
+                        optData.text = "Micro - $0.10";
+                        break;
+                    case 3:
+                        optData.text = "Macro - $1.00";
+                        break;
+                    case 4:
+                        optData.text = "Mega - $10.00";
+                        break;
+                    case 5:
+                        optData.text = "High Roller - $100";
+                        break;
+                }
+                    
+                //optData.text = leaderboard.name;
                 lstData.Add(optData);
                 dicLeaderBoard.Add(leaderboard.name, leaderboard.id);
 
                 lstObj = GameObject.Find("drd_LeaderBoard");
                 list = lstObj.GetComponent<TMPro.TMP_Dropdown>();
-
+                idx += 1;
                 //Debug.Log("Leaderboards.Start: isClient - label.text= " + leaderboard.name + ", button.name= " + leaderboard.id);
             }
             if (list)
@@ -76,7 +100,7 @@ public class Leaderboards : NetworkBehaviour
             var jwtService = new JWTService();
             string _playerId = jwtService.GetPlayerId(PlayerPrefs.GetString("HasteAccessToken"));
             string _leaderBoardId = dicLeaderBoard.Values.ElementAt(list.value); ;
-            Debug.Log("Leaderboards.KeepConnect! leaderboardId =" + _leaderBoardId + ", leaderboardId =" + _playerId);
+            //Debug.Log("Leaderboards.KeepConnect! leaderboardId =" + _leaderBoardId + ", leaderboardId =" + _playerId);
             CmdEmptyRequest(_leaderBoardId, _playerId);
         }
     }
@@ -113,7 +137,6 @@ public class Leaderboards : NetworkBehaviour
     {
         Debug.Log("CmdSelectPayment - payment flow-2! JWT= " + JWT + ", leaderboardId =" + leaderboardId);
         // kick off the payment flow via haste Play endpoint
-        //PlayerPrefs.SetString("HasteLeaderboardId", leaderboardId);// wrong in Multi Player ????? only one player ???
         //Debug.Log("CmdSelectPayment: HasteLeaderboardId =" + leaderboardId + " saved in PlayerPrefs!");
         StartCoroutine(HasteIntegration.Instance.Server.Play(JWT, leaderboardId, PlayResult));
     }
@@ -134,17 +157,11 @@ public class Leaderboards : NetworkBehaviour
         // hide all canvas elements to show the underlying game
         GameObject UIManangerObj = GameObject.Find("UIManager");
         UIManangerObj.GetComponent<UIMananger>().LeaderboardSelect.SetActive(false);
-        UIManangerObj.GetComponent<UIMananger>().FinalScoreScreen.SetActive(false);
         UIManangerObj.GetComponent<UIMananger>().InGameUI.SetActive(true);
-
-        //UIMananger.Instance.LeaderboardSelection.SetActive(false);
-        //UIMananger.Instance.FinalScoreScreen.SetActive(false);
-        //UIMananger.Instance.InGameUI.SetActive(true);
-
+        
         var uiCamera = GameObject.Find("MenuCamera");
         uiCamera.SetActive(false);
         GameObject.Find("StartObjects").GetComponent<Continue>().Play();// client side
-
     }
     
     void PlayResult(HasteServerPlayResult playResult)
@@ -161,7 +178,6 @@ public class Leaderboards : NetworkBehaviour
             }
             else
             {
-                //PlayerPrefs.SetString("HastePlayId", playResult.id);
                 //Debug.Log("PlayResult: HastePlayId =" + playResult.id + " saved in PlayerPrefs!");
                 //((HasteMirrorNetManager)NetworkManager.singleton).StartGameInstanceForPlayer(GetComponent<NetworkIdentity>().connectionToClient);
                 RpcStartGame(playResult.id);

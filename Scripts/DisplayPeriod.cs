@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DisplayPeriod : MonoBehaviour
 {
-    public float displayPeriod = 0.0f;
+    public float displayPeriod = 3.0f;
 
     // Start is called before the first frame update
     void Start()

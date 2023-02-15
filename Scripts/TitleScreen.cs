@@ -15,7 +15,6 @@ public class TitleScreen : MonoBehaviour
 {
     public Role Role;
 
-
     private bool clientStarted = false;
 
     void Start()
@@ -29,10 +28,12 @@ public class TitleScreen : MonoBehaviour
 
         if (Role == Role.Server || Application.platform == RuntimePlatform.LinuxPlayer)
         {
-            UIManangerObj.GetComponent<UIMananger>().clientUI.SetActive(false);
-            UIManangerObj.GetComponent<UIMananger>().serverUI.SetActive(true);
+            UIManangerObj.GetComponent<UIMananger>().clientUI.SetActive(false);            
             UIManangerObj.GetComponent<UIMananger>().FinalScoreScreen.SetActive(false);
-            //UIManangerObj.GetComponent<UIMananger>().LeaderboardSelect.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().LeaderboardSelect.SetActive(false);            
+            UIManangerObj.GetComponent<UIMananger>().InGameUI.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().CarSelection.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().serverUI.SetActive(true);
 
             //UIMananger.Instance.serverUI.SetActive(true);
             //UIMananger.Instance.clientUI.SetActive(false);            
@@ -48,14 +49,16 @@ public class TitleScreen : MonoBehaviour
             UIManangerObj.GetComponent<UIMananger>().clientUI.SetActive(false);
             UIManangerObj.GetComponent<UIMananger>().serverUI.SetActive(false);
             UIManangerObj.GetComponent<UIMananger>().InGameUI.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().FinalScoreScreen.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().LeaderboardSelect.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().CarSelection.SetActive(false);
             Login();
         }
     }
 
     public void Login()
     {
-        //Debug.Log("TitleScreen.Login is started!");
-        //clientUI.SetActive(false);
+        //Debug.Log("TitleScreen.Login is started!");        
         MobileDetection.GetTokenFromBrowser();
 #if UNITY_EDITOR
         StartNonBrowserLoginFlow();
@@ -68,12 +71,14 @@ public class TitleScreen : MonoBehaviour
     PlayerPrefs.SetString("HasteAccessToken", token);
 
     Debug.Log("TitleScreen.Login: token= "+ token);
+
     StartClient();
+    //SelectPlayer();
 #else
   StartNonBrowserLoginFlow();
 #endif
-
     }
+
     private void StartNonBrowserLoginFlow()
     {
         // The access token should be stored somewhere.
@@ -94,14 +99,27 @@ public class TitleScreen : MonoBehaviour
         else
         {
             // The user is already logged in
-            StartClient();
+            //SelectPlayer();
+            StartClient();            
         }
     }
 
-    private void StartClient()
+    private void SelectPlayer()
+    {
+        GameObject UIManangerObj = GameObject.Find("UIManager");
+        UIManangerObj.GetComponent<UIMananger>().CarSelection.SetActive(true);
+        UIManangerObj.GetComponent<UIMananger>().TitleScreen.SetActive(false);
+    }
+
+    public void StartClient()
     {
         if (!clientStarted)
         {
+            GameObject UIManangerObj = GameObject.Find("UIManager");
+            UIManangerObj.GetComponent<UIMananger>().CarSelection.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().TitleScreen.SetActive(false);
+            UIManangerObj.GetComponent<UIMananger>().LeaderboardSelect.SetActive(true);
+
             clientStarted = true;
             //UIMananger.Instance.clientUI.SetActive(true);
             
@@ -115,15 +133,7 @@ public class TitleScreen : MonoBehaviour
             networkClient.port = (serverUrl != "localhost" ? (ushort)443 : (ushort)7778);
 
             NetworkManager.singleton.StartClient();
-
-            var titlePanel = GameObject.Find("TitleScreen");
-            var leaderboardPanel = GameObject.Find("LeaderboardSelection");
-            var finalScreen = GameObject.Find("FinalScoreScreen");
-
-            titlePanel.SetActive(false);
-            finalScreen.SetActive(false);
-            leaderboardPanel.SetActive(true);
-
+                        
             Debug.Log("TitleScreen.StartClient: serverUrl=" + serverUrl + ", port= " + networkClient.port.ToString());
         }
     }
@@ -147,6 +157,7 @@ public class TitleScreen : MonoBehaviour
         else
         {
             StartClient();
+            //SelectPlayer();
         }
 
     }

@@ -68,8 +68,7 @@ namespace UnityStandardAssets.Vehicles.Car
             }
 
             m_Target = TargetGameObject.GetComponent<Transform>();
-        }
-
+        }        
 
         private void FixedUpdate()
         {

@@ -23,7 +23,7 @@ public class HasteMirrorNetManager : NetworkManager
     [Scene]
     public string gameScene;
 
-    readonly Dictionary<string, Scene> subScenes = new Dictionary<string, Scene>();
+    readonly public Dictionary<string, Scene> subScenes = new Dictionary<string, Scene>();
 
     readonly Dictionary<string, GameObject> leaderboards = new Dictionary<string, GameObject>();
 
@@ -92,6 +92,7 @@ public class HasteMirrorNetManager : NetworkManager
         {
             StartCoroutine(SpawnRewardPoint(conn, rewardPrefab[i]));
         }
+        Debug.Log("HasteMirrorNetManager.OnServerAddPlaer: Player is added!");
     }
 
     void SpawnLeaderboard(NetworkConnection conn)
@@ -117,7 +118,7 @@ public class HasteMirrorNetManager : NetworkManager
         GameObject rewardPoint = UnityEngine.Object.Instantiate(rewardPrefab, spawnPosition, spawnRoat);
         //Debug.Log("SpawnRewardPoint: rewardPoin = " + rewardPoint.ToString());
         NetworkServer.Spawn(rewardPoint, conn);
-        //SceneManager.MoveGameObjectToScene(rewardPoint, subScenes[(conn.identity.netId.ToString())]);        
+        SceneManager.MoveGameObjectToScene(rewardPoint, subScenes[(conn.identity.netId.ToString())]);      
     }
 
     private void GetHasteTokenCompleted(HasteServerAuthResult result)

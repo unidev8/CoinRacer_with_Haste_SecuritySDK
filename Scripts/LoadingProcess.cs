@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class LoadingProcess : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class LoadingProcess : MonoBehaviour
     public GameObject txt_Howto;
     public GameObject btnPlay;
     public GameObject txt_Notice;
+    public GameObject btnSelNFTCar;
+    public GameObject tglSound;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +19,8 @@ public class LoadingProcess : MonoBehaviour
         drdLeaderBoard.SetActive(false);        
         txt_Howto.SetActive(false);
         btnPlay.SetActive(false);
+        btnSelNFTCar.SetActive(false);
+        tglSound.SetActive(false);
     }
 
     public void ChangeValue()
@@ -25,7 +30,7 @@ public class LoadingProcess : MonoBehaviour
         TMP_Dropdown.OptionData[] listOptions = new TMP_Dropdown.OptionData[list.options.Count];
         listOptions = list.options.ToArray() ;
         string selText = listOptions[idx].text.ToString();
-        if (selText == "Macro" || selText == "Mega" || selText == "High Roller")
+        if (selText == "Macro - $1.00" || selText == "Mega - $10.00" || selText == "High Roller - $100")
         {
             txt_Notice.GetComponent<TMP_Text>().text = $"Sorry, this game is still in testing mode, and {selText} play is not yet available. Come back later";
             btnPlay.SetActive(false);
@@ -47,5 +52,28 @@ public class LoadingProcess : MonoBehaviour
         drdLeaderBoard.SetActive(true);
         txt_Howto.SetActive(true);
         btnPlay.SetActive(true);
+        btnSelNFTCar.SetActive(true);
+        tglSound.SetActive(true);
+    }
+
+    public void SoundToggle()
+    {
+        Camera[] cameraObjs = GameObject.FindObjectsOfType<Camera>(); ;
+        if (tglSound.GetComponent <Toggle>().isOn )
+        {            
+            foreach ( Camera obj in cameraObjs)
+            {
+                if (obj.GetComponent<AudioListener>())
+                    obj.GetComponent<AudioListener>().enabled = false;
+            }
+        }
+        else
+        {
+            foreach (Camera obj in cameraObjs)
+            {
+                if (obj.GetComponent<AudioListener>())
+                    obj.GetComponent<AudioListener>().enabled = true;
+            }
+        }
     }
 }
