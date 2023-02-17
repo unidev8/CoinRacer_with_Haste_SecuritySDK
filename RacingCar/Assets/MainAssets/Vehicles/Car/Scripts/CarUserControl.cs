@@ -2,8 +2,10 @@ using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using TMPro;
-using TouchControlsKit;
+//using UnityEngine.iOS;
+//using TouchControlsKit;
 using static UnityEngine.AudioSettings;
+
 
 namespace UnityStandardAssets.Vehicles.Car
 {
@@ -12,34 +14,67 @@ namespace UnityStandardAssets.Vehicles.Car
     {
         private CarController m_Car; // the car controller we want to use
         //[SerializeField]
-        private TMP_Text textObj; 
+        private TMP_Text textObj;
+        private float mV, mH;
+        private const float vSensitive = 3f;
+        private const float hSensitive = 5f;
 
         private void Awake()
         {
             // get the car controller
             m_Car = GetComponent<CarController>();
         }
-        
+
+        public void Horizontal_P()
+        {
+            mH = hSensitive;
+        }
+
+        public void Horizontal_N()
+        {
+            mH = -hSensitive;
+        }
+
+        public void Vertical_P()
+        {
+            mV = vSensitive;
+        }
+
+        public void Vertical_N()
+        {
+            mV = -vSensitive;
+        }
+
         private void FixedUpdate()
         {
             float h, v, v_mobile, h_mobile;
-            
-            //if (SystemInfo.deviceType == DeviceType.Desktop )
+
+            if (SystemInfo.deviceType == DeviceType.Desktop)
             {
                 h = CrossPlatformInputManager.GetAxis("Horizontal");
                 v = CrossPlatformInputManager.GetAxis("Vertical");
+                //if (h > 0 || v > 0)
+                    //Debug.Log("Horizontal = " + h + "Vertical =" + v);
             }
-            //else
+            else
             {
-                v_mobile = TCKInput.GetAxis("Touchpad_Y").y * 30f;
-                h_mobile = TCKInput.GetAxis("Touchpad_X").x * 2f;
-            }
+                /* if (Input.touchCount >0)
+                 {
+                     Touch touch = Input.GetTouch(0);
+                     Debug.Log("touchCount=" + Input.touchCount);
+                 }
+                 h = Input.touchCount;
+                 v = Input.touchCount;
+                */
+                //v = TCKInput.GetAxis("Touchpad_Y").y * 30f;
+                //h = TCKInput.GetAxis("Touchpad_X").x * 2f;
+                h = mH;
+                v = mV;
+                mH = 0f;
+                mV = 0f;
 
-            if (v_mobile != 0f || h_mobile != 0f)
-            {
-                h = h_mobile;
-                v = v_mobile;
             }
+            
 
 #if !MOBILE_INPUT
 
@@ -47,7 +82,6 @@ namespace UnityStandardAssets.Vehicles.Car
             m_Car.Move(h, v, v, handbrake);
 #else
             m_Car.Move(h, v, v, 0f);
-
 #endif            
         }
 

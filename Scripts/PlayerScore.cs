@@ -63,7 +63,7 @@ namespace Mirror.Examples.MultipleAdditiveScenes
             if (value)
             {
                 startTime = NetworkTime.time;
-                Debug.Log("PlayerScore.CmdSetSync_hasStart: startTime =" + startTime);
+                //Debug.Log("PlayerScore.CmdSetSync_hasStart: startTime =" + startTime);
             }
         }
 
@@ -81,6 +81,7 @@ namespace Mirror.Examples.MultipleAdditiveScenes
             if (timeRemaining > 0)
             {
                 timeRemaining = countTime - (int)(NetworkTime.time - startTime);//Time.deltaTime; //Time.deltaTime;
+                StartCoroutine(DisplayCount());
                 //Debug.Log("PlayerScore.Update: timeRemaining =" + timeRemaining);
             }
             else 
@@ -103,9 +104,9 @@ namespace Mirror.Examples.MultipleAdditiveScenes
         [ClientCallback]
         private void FixedUpdate()
         {
-            if (!hasEnded && hasStarted)
+            //if (!hasEnded && hasStarted)
             {
-                StartCoroutine(DisplayCount());
+                //StartCoroutine(DisplayCount());
             }
         }
 
@@ -134,14 +135,14 @@ namespace Mirror.Examples.MultipleAdditiveScenes
             string playId = PlayerPrefs.GetString("HastePlayId");
             string leaderboardId = PlayerPrefs.GetString("HasteLeaderboardId");
 
-            //Debug.Log("PlayerScore.EndGame: playId =" + playId + ", leaderboardId=" + leaderboardId);
+            Debug.Log("PlayerScore.RpcGetIdsforScore: playId =" + playId + ", leaderboardId=" + leaderboardId);
             CmdScore(playId, leaderboardId);
         }
 
         [Command]
         void CmdScore(string playId, string leaderboardId)
         {
-            //Debug.Log("PlayerSocre.cmdScore: playId= " + playId + ", leaderboardID=" + leaderboardId);
+            Debug.Log("PlayerSocre.cmdScore: playId= " + playId + ", leaderboardID=" + leaderboardId);
             StartCoroutine(HasteIntegration.Instance.Server.Score(score.ToString(), playId, leaderboardId, ScoreResult));
         }
 
@@ -167,7 +168,7 @@ namespace Mirror.Examples.MultipleAdditiveScenes
 
             GameObject.Find("txtResult_f").GetComponent<TMPro.TextMeshProUGUI>().text = message;
 
-            Debug.Log("PlayerScore.RpcEndGame: is ended !");
+            //.Log("PlayerScore.RpcEndGame: is ended !");
         }
 
         void ScoreResult(HasteServerScoreResult scoreResult)

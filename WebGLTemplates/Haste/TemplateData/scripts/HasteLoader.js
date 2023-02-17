@@ -91,8 +91,8 @@ function createUnityInstance() {
         frameworkUrl: "Build/web_client.framework.js",
         codeUrl: "Build/web_client.wasm",
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "Dima-HasteArcade.com",
-        productName: "HasteArcade_Haste Racer",
+        companyName: "",
+        productName: "Coin Racer",
         productVersion: "v1",
       }).then((unityInstance) => {
           document.querySelector(".loading-container").style.display = 'none';
