@@ -77,7 +77,8 @@ namespace Mirror
         [FormerlySerializedAs("m_PlayerPrefab")]
         [Tooltip("Prefab of the player object. Prefab must have a Network Identity component. May be an empty game object or a full avatar.")]
         public GameObject playerPrefab;
-
+        public GameObject[] playersPrefab;
+        public GameObject selUI;
         /// <summary>Enable to automatically create player objects on connect and on scene change.</summary>
         [FormerlySerializedAs("m_AutoCreatePlayer")]
         [Tooltip("Should Mirror automatically spawn the player after scene change?")]
@@ -1259,6 +1260,27 @@ namespace Mirror
                 //Debug.Log("Ready with no player object");
             }
             NetworkServer.SetClientReady(conn);
+        }
+        public void SetPlayerPrefab(int idx, GameObject obj)
+        {
+            playerPrefab = playersPrefab[idx];
+            Debug.Log("NetworkManager.SetPlayerPrefab: idx=" + idx + ", PlayerPrefab=" + playerPrefab.name);
+            
+
+        }
+
+        public void ReplacePlayer(int idx, NetworkConnection conn)
+        {
+            Transform startPos = GetStartPosition();
+            GameObject gamePlayer = startPos != null
+                ? Instantiate(playersPrefab[idx], startPos.position, startPos.rotation)
+                : Instantiate(playersPrefab[idx], Vector3.zero, Quaternion.identity);
+            Debug.Log("NetworkManager.ReplacePlayer: gamePlayer=" + gamePlayer);
+            // (!OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer))
+            //return;
+            Debug.Log("NetworkManager.ReplacePlayer: new gamePlayer=" + gamePlayer);
+            // replace room player with game player
+            NetworkServer.ReplacePlayerForConnection_v2(conn, gamePlayer, true);
         }
 
         /// <summary>Called on server when a client requests to add the player. Adds playerPrefab by default. Can be overwritten.</summary>

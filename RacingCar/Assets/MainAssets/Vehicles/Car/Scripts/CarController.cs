@@ -35,7 +35,7 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] public float m_Topspeed = 200;
         [SerializeField] private static int NoOfGears = 5;
         [SerializeField] private float m_RevRangeBoundary = 1f;
-        [SerializeField] private float m_SlipLimit;
+        [SerializeField] private float m_SlipLimit = 0.0f;
         [SerializeField] private float m_BrakeTorque;
 
         private Quaternion[] m_WheelMeshLocalRotations;
@@ -59,6 +59,16 @@ namespace UnityStandardAssets.Vehicles.Car
         // Use this for initialization
         private void Start()
         {
+            //if (!GameObject.Find("UI")) return;
+            string isServer = GameObject.Find("UI").GetComponent<TitleScreen>().Role.ToString();
+            if (isServer == "Server" && gameObject.tag == "AICarCollider")
+            {
+                gameObject.SetActive(false);
+                //Debug.Log("CarController.Start! name = " + gameObject.name);
+                return;
+
+            }
+
             m_WheelMeshLocalRotations = new Quaternion[4];
             for (int i = 0; i < 4; i++)
             {
@@ -73,7 +83,6 @@ namespace UnityStandardAssets.Vehicles.Car
 
             Debug.Log("CarController.Start: is started!");
         }
-
 
         private void GearChanging()
         {

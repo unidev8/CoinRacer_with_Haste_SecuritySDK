@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8708308538133306914}
   - component: {fileID: 390032377}
   m_Layer: 0
-  m_Name: Coine
+  m_Name: old_Coine
   m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +96,7 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4917415413342571313}
   m_Material: {fileID: 13400000, guid: 47163bc0301c1a146bbaa4d539a6ac36, type: 2}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
@@ -133,7 +133,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  yPos: 0
   grade: 1
 --- !u!54 &8708308538133306914
 Rigidbody:
@@ -153,7 +152,7 @@ Rigidbody:
   m_CollisionDetection: 0
 --- !u!95 &390032377
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -170,4 +169,4 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
